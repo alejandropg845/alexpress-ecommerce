@@ -1,0 +1,7 @@
+<p *ngIf="loadingDialogService.isAnalysingSubject | async" 
+    class="fixed bottom-5 right-5 z-[9999] px-5 rounded-lg shadow-2xl py-1 bg-white text-base font-semibold x:text-xl md:text-2xl">
+    <i class="fa-solid fa-spinner fa-spin text-cyan-500"></i>
+    Loading...
+</p>
+    
+<div *ngIf="loadingDialogService.isAnalysingSubject | async" class="fixed inset-0 z-[999]"></div>

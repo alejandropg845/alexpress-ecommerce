@@ -1,0 +1,125 @@
+<h1 class="text-3xl mt-28 text-center my-4 md:mt-36 lg:mt-40">Orders history</h1>
+<p *ngIf="orders.length===0" class="text-gray-500 text-center mt-10">You haven't done an order yet</p>
+@for (order of orders; track order) {
+<div class="flex
+          bg-gray-100
+            p-2
+            rounded-md
+            mb-5 
+            w-[95%]
+            flex-col
+            mx-auto
+            items-center
+            justify-center
+            x:w-[80%]
+            md:w-[70%]
+            md:gap-4
+            md:items-center
+            md:justify-between
+            lg:w-[95%]
+            lg:flex-row
+            lg:justify-evenly">
+
+    <div>
+
+        <h2 class="mb-1">Created on: <span class="bg-cyan-300 px-1 rounded-md font-medium">{{order.createdOn | date}}</span></h2>
+            
+        <p class="font-semibold mb-4 text-xl md:text-xl">Ordered products</p>
+
+        <div class="flex gap-2 mb-5 items-center justify-evenly flex-wrap p-3 rounded-md lg:grid lg:grid-cols-2">
+            @for (ordered of order.orderedProducts; track $index) {
+            <div class="w-36 h-36 lg:w-36 lg:h-36 lg:mb-6 relative">
+                <a [routerLink]="['/alexpress/product/', ordered.productId]">
+                    <img  class="w-full h-full object-cover" [src]="ordered.image" alt="ordered product image">
+                    <p class="p-3 w-4 h-4 flex items-center justify-center absolute -top-2 -right-2 rounded-full bg-white border-2 border-cyan-300 font-medium">{{ordered.quantity}}</p>
+                </a>
+                <small class="flex items-center justify-start">USD<p class="text-xl font-bold px-0.5">{{ordered.price}}</p>$</small>
+            </div>
+            }
+        </div>
+
+    </div>
+
+    <div>
+        <div class="bg-gray-300 rounded-lg px-2 pb-1">
+            <h2 class="pt-1 font-semibold text-xl md:text-2xl">Shipping information</h2>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">Full name</p>
+                    <p class=" text-xs font- line-clamp-1 md:text-base">{{order.address.fullName}}</p>
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">Phone</p>
+                    <p class=" text-xs md:text-base">{{order.address.phone}}</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">Postal code</p>
+                    <p class=" text-xs line-clamp-1 md:text-base">{{order.address.postalCode}}</p>
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">City</p>
+                    <p class=" text-xs md:text-base">{{order.address.city}}</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">Residence</p>
+                    <p class=" text-xs line-clamp-1 md:text-base">{{order.address.residence}}</p>
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs font-bold md:text-lg md:font-medium">Country</p>
+                    <p class=" text-xs md:text-base">{{order.address.country}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-evenly items-center w-full gap-3 mt-3">
+            <p class="border-b-4 border-cyan-300 text-base x:text-lg">Summary: <span class="font-medium md:text-3xl">USD ${{order.summary}}</span></p>
+            <button 
+            *ngIf="!order.rating" 
+            type="button"
+            (click)="onShowRatingWindow(order.id)"
+            class="px-2 border rounded-md font-medium bg-gradient-to-r from-cyan-300 to-cyan-500 hover:border-black">Rate and review this order</button>
+            <p *ngIf="order.rating" class="px-2 font-bold text-sm x:text-base text-black bg-gradient-to-r border-green-300 from-green-400 to-green-600 rounded-lg border-2">Already rated</p>
+        </div>
+    </div>
+
+</div>
+}
+
+<div class="fixed inset-0 bg-black opacity-30 z-[999]" *ngIf="showRatingWindow"></div> <!--Opacity-->
+<div class="fixed flex justify-center items-center inset-0 z-[999]" *ngIf="showRatingWindow"> <!--Container-->
+    <div class="bg-white w-[300px] z-50 p-4 rounded-lg"><!--Content container-->
+        <div class="flex flex-col justify-center items-center">
+            <div>
+                <p class="font-medium text-center">Rate your order</p>
+                <div>
+                    <button (click)="onSetRating(1)" (mouseover)="onMouseOnRating(1)" (mouseout)="onMouseLeaveRating()"><i [ngClass]="{'text-yellow-400':rating>=1 || hoverRating>=1}" class="text-2xl fa-solid fa-star transition ease-in-out duration-200"></i></button>
+                    <button (click)="onSetRating(2)" (mouseover)="onMouseOnRating(2)" (mouseout)="onMouseLeaveRating()"><i [ngClass]="{'text-yellow-400':rating>=2 || hoverRating>=2}" class="text-2xl fa-solid fa-star transition ease-in-out duration-200"></i></button>
+                    <button (click)="onSetRating(3)" (mouseover)="onMouseOnRating(3)" (mouseout)="onMouseLeaveRating()"><i [ngClass]="{'text-yellow-400':rating>=3 || hoverRating>=3}" class="text-2xl fa-solid fa-star transition ease-in-out duration-200"></i></button>
+                    <button (click)="onSetRating(4)" (mouseover)="onMouseOnRating(4)" (mouseout)="onMouseLeaveRating()"><i [ngClass]="{'text-yellow-400':rating>=4 || hoverRating>=4}" class="text-2xl fa-solid fa-star transition ease-in-out duration-200"></i></button>
+                    <button (click)="onSetRating(5)" (mouseover)="onMouseOnRating(5)" (mouseout)="onMouseLeaveRating()"><i [ngClass]="{'text-yellow-400':rating>=5 || hoverRating>=5}" class="text-2xl fa-solid fa-star transition ease-in-out duration-200"></i></button>
+                </div>
+            </div>
+            <div class="mt-5">
+                <p class="font-medium">Leave a comment</p>
+                <textarea 
+                (input)="onTypingComment(textarea)" 
+                #textarea 
+                class="border-2 border-black px-2 py-1 rounded-lg w-[260px] h-[100px]"
+                maxlength="150"></textarea>
+                <p class="font-bold"><span>{{commentCounter}}</span> / 150</p>
+            </div>
+            <div class="flex justify-evenly gap-2">
+                <button type="button" (click)="onCancelRating()" class="px-6 mt-5 py-1 font-medium rounded-lg hover:border-black border-2 border-transparent transition ease-in-out duration-300">Cancel</button>
+                <button type="button" (click)="reviewOrder(textarea.value)" class="px-6 mt-5 py-1 font-medium rounded-lg bg-cyan-300 border-2 border-transparent hover:border-black transition ease-in-out duration-300">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

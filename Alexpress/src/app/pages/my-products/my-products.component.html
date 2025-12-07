@@ -1,0 +1,44 @@
+<h1 class="text-center text-3xl font-medium mt-28 mb-5 md:mt-32 lg:mt-40">Your products</h1>
+
+
+    
+<p *ngIf="products.length === 0" class="text-gray-400 font-medium text-center my-20">You haven't added products. <a routerLink="/alexpress/add" class="text-black font-bold underline">Add one</a></p>
+
+<div class="flex flex-col items-center md:flex-row md:flex-wrap md:justify-center md:gap-2 md:mx-2"> <!--Products container-->
+    
+    @for (product of products; track product) {
+
+        <div class="flex items-center gap-2 w-[320px] h-[160px] x:w-[450px] x:h-[200px] md:w-[370px] border-[1px] my-2"> <!--Product container-->
+            <a class="w-full h-full" [routerLink]="['/alexpress/product', product.id]">
+                <img class="w-full h-full object-cover" [src]="product.image" alt="image">
+            </a>
+            
+            <div class="w-full"> <!--Info container-->
+                <h3 class="text-sm x:text-base font-bold line-clamp-2 overflow-hidden break-words">{{product.title | titlecase}}</h3>
+                <p class="text-xs x:text-sm font-bold line-clamp-1">Price: <span class="font-normal">USD ${{product.price}}</span></p>
+                <p class="text-xs x:text-sm font-bold line-clamp-1">Category: <span class="font-normal">{{product.category | titlecase}}</span></p>
+                <p class="bg-cyan-300 font-bold x:text-sm rounded-lg text-xs w-max px-1.5 py-.5 my-1">{{product.condition | titlecase}}</p>
+                <p class="text-xs x:text-sm font-bold line-clamp-1">Shipping price: <span class="font-normal">USD ${{product.shippingPrice}}</span></p>
+                <p class="text-xs x:text-sm font-bold line-clamp-1 mb-1.5">Stock: <span class="font-normal">{{product.stock}}</span></p>
+
+                <div class="flex justify-evenly px-2 x:gap-2"> <!--Buttons-->
+                    
+                    <p class="text-xs hover:bg-cyan-300 hover:text-black font-bold border-[1px] rounded-sm border-black px-2 cursor-pointer x:text-sm x:rounded-md x:flex x:items-center x:gap-2" [routerLink]="['/alexpress/my_products', product.id]">
+                        <i class="hidden x:block fa-regular fa-pen-to-square"></i>
+                        Edit
+                    </p>
+                    
+                    <p class="text-xs hover:bg-red-300 hover:text-black font-bold border-[1px] border-black px-2 cursor-pointer x:text-sm x:rounded-md x:flex x:items-center x:gap-2" (click)="removeProduct(product.id!)">
+                        <i class="hidden x:block fa-regular fa-trash-can"></i>
+                        Remove
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+</div>
+

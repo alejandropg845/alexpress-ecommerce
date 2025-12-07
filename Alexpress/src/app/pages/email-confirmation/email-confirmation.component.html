@@ -1,0 +1,6 @@
+<div class="my-32 w-full flex flex-col items-center justify-center md:mt-44">
+
+    <p *ngIf="isSucceeded" class="font-medium flex items-center gap-2">Your email has been verified. <i class="fa fa-solid fa-check p-1 bg-green-400 rounded-full w-6 h-6 flex items center justify-center"></i></p>
+    <p *ngIf="!isSucceeded" class="font-medium flex items-center gap-2">Your email couldn't be verified. <i class="fa fa-solid fa-x p-1 bg-red-400 rounded-full w-6 h-6 flex items center justify-center"></i></p>
+
+</div>

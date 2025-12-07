@@ -1,0 +1,147 @@
+<h1 *ngIf="!product" class="mt-28 text-center font-semibold text-3xl mb-7 md:mt-36">Sell a product</h1>
+
+<form [formGroup]="form" (submit)="onSubmit()">
+
+    <div class="flex flex-col w-[92%] m-auto mb-10 lg:flex-row lg:justify-evenly lg:w-full">
+
+
+        <div (drop)="onDropImages($event)"  (dragover)="onDragOverImages($event)" (dragleave)="onDragLeaveImages($event)" class="relative flex flex-col justify-center items-center border border-black border-dashed h-40 p-2 x:h-56 lg:w-72 flex-wrap">
+            
+
+            <div class="flex flex-col items-center">
+                <p *ngIf="files.length===0" class="font-bold"><i class="fa-solid fa-upload mr-2"></i>Drag and drop images</p>
+                <p *ngIf="files.length===0" class="text-gray-500 font-medium">or</p>
+            </div>
+            <div class="flex flex-wrap justify-center items-center overflow-auto">
+            @for (file of files; track file; let i=$index) {
+
+                <div class="relative lg:mb-10">
+                    <img #img class="w-24 h-24 object-cover p-1" [src]="setValueToSrc(img, file)" alt="image_preview">
+                    <i (click)="deleteImage(i)" class="fa-solid fa-xmark hover:bg-red-500 cursor-pointer absolute top-8 left-8 bg-cyan-300 px-2 rounded-xl text-2xl opacity-60"></i>
+                </div>
+            } 
+            </div>
+
+            <input multiple id="input-label" accept="image/*" (change)="onSelectedImages($event)" type="file" class="hidden">
+            
+            <label for="input-label" class="absolute bottom-2 cursor-pointer border border-black bg-cyan-300 font-medium px-2 py-1 rounded-sm mt-2">Select product images</label>
+        </div>
+        
+
+        <div class="flex flex-col">
+            <div>
+                <input maxlength="160" (input)="checkLength('title')" formControlName="title" [class]="validateField('title')" class="w-full p-2 bg-gray-200 border  border-black mt-2 outline-none rounded-md" type="text" placeholder="Title">
+                <p  class="text-xs font-bold"> {{titleLength}} / 160</p>
+            </div>
+            
+            <textarea id="product-description-textarea" maxlength="2000" (input)="checkLength('description')" formControlName="description" [class]="validateField('description')" class="p-2   bg-gray-200 border h-32 border-black mt-2 outline-none rounded-md resize-none" type="text" placeholder="Description"></textarea>
+            <p  class="text-xs font-bold"> {{descriptionLength}} / 2000</p>
+
+        
+            <div 
+            class="w-full 
+            flex flex-col 
+            gap-2 
+            items-start 
+            my-2
+            
+            md:grid md:grid-cols-2 md:gap-0"
+            formGroupName="coupon">
+            
+                <input class="w-full
+                max-w-[240px]
+                font-bold
+                p-1
+                text-sm
+                mb-1
+                [&::-webkit-inner-spin-button]:m-0 
+                [&::-webkit-inner-spin-button]:appearance-none 
+                [&::-webkit-outer-spin-button]:m-0 
+                [&::-webkit-outer-spin-button]:appearance-none 
+                [appearance:textfield]
+                border
+                border-black
+                rounded-md
+                "
+                formControlName="discount" 
+                type="number" placeholder="Customized discount (0-100)%">
+
+                <div (click)="setCouponName('is50OffOneProduct')">
+                    <input #couponName name="coupon" class="mr-1" id="is50OffOneProduct" name="couponName" type="radio">
+                    <label for="is50OffOneProduct" class="text-xs x:text-sm font-bold bg-cyan-300 px-2 py-0.5 rounded-md border-b-gray-300 border-b-2 cursor-pointer">50 off in one product (requires at least 2 units)</label>
+                </div>
+
+                <div (click)="setCouponName('isFreeShipping')">
+                    <input #couponName name="coupon" class="mr-1" id="isFreeShipping" name="couponName" type="radio">
+                    <label for="isFreeShipping" class="text-xs x:text-sm font-bold bg-cyan-300 px-2 py-0.5 rounded-md border-b-gray-300 border-b-2 cursor-pointer">Free shipping</label>
+                </div>
+
+                <div (click)="setCouponName('is50Discount')">
+                    <input #couponName name="coupon" class="mr-1" id="is50Discount" name="couponName"  type="radio">
+                    <label for="is50Discount" class="text-xs x:text-sm font-bold bg-cyan-300 px-2 py-0.5 rounded-md border-b-gray-300 border-b-2 cursor-pointer">50 off on total products</label>
+                </div>
+
+                <button 
+                type="button" 
+                class="bg-cyan-200 px-2 py-1 rounded-md border border-black mt-2 max-w-40 hover:bg-cyan-300"
+                (click)="clearSelection()"
+                >Clear</button>
+                
+            </div>
+
+            <div class="flex justify-evenly mt-1 x:justify-evenly">
+
+                
+                <input formControlName="price" [class]="validateField('price')" class="p-2  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-200 border w-24 border-black mt-2 outline-none rounded-md" type="number" placeholder="Price">
+                
+
+                <select formControlName="categoryId" [class]="validateField('categoryId')" class="px-2  border border-black rounded-sm text-sm outline-none font-medium md:text-lg md:w-60">
+                    <option value="0">Select category</option>
+                    <option value="1">Watches</option>
+                    <option value="2">Clothes</option>
+                    <option value="3">Shoes</option>
+                    <option value="4">Pet Toys</option>
+                    <option value="5">Phones & Tablets</option>
+                    <option value="6">TV & Home</option>
+                    <option value="7">Audio & Sound</option>
+                </select>
+            </div>
+        
+            <div class="flex flex-wrap justify-evenly mt-2 x:flex-row-reverse x:mt-4 x:justify-evenly">
+
+            
+                <input formControlName="stock" [class]="validateField('stock')" class="p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  bg-gray-200 border border-black mt-2 outline-none rounded-md w-24 lg:ml-4" type="number" placeholder="Quantity">
+                
+                    
+                <input formControlName="shippingPrice" [class]="validateField('shippingPrice')" class=" w-32 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none x:block p-2 bg-gray-200 border x:w-32 border-black mt-2 outline-none rounded-md lg:ml-4" type="number" placeholder="Shipping price">
+        
+                <select formControlName="conditionId" [class]="validateField('conditionId')" class="w-full mt-2 py-2 px-1 border  border-black rounded-sm text-sm outline-none font-medium md:text-lg md:w-60 lg:w-40">
+                    <option value="0">Condition</option>
+                    <option value="1">Used</option>
+                    <option value="2">Refurbished</option>
+                    <option value="3">New</option>
+                </select>
+        
+            </div>
+
+            <button
+            [ngClass]="{'pointer-events-none bg-gray-400 dark:bg-gray-400':isVisible}" 
+            class="mt-4
+            bg-cyan-300 px-4 border-2 
+            border-black rounded-lg font-bold py-1" 
+            type="submit">
+            <span *ngIf="!product">Add product</span>
+            <span *ngIf="product">Save changes</span><i *ngIf="isVisible" class="fa-solid fa-spinner ml-1 animate-spin"></i>
+        </button>
+        
+        </div>
+
+        
+    </div>
+
+
+
+</form>
+
+
+

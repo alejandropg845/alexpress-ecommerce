@@ -1,0 +1,56 @@
+
+<div class="flex flex-col justify-center items-center gap-2">
+    <img src="assets/templates/logos/dark-mode-logo.png" class="w-28 h-28 mt-10 m-auto md:mt-0 lg:mt-5"  alt="logo">
+    <p routerLink="/alexpress/home" class="font-bold bg-cyan-300 border-2 border-cyan-400 w-max text-black rounded-xl px-2 text-center cursor-pointer hover:shadow-inner hover:shadow-black transition ease-in-out duration-300">Click here to go ahead with no account</p>
+    <p class="font-bold bg-white border-2 border-gray-400 w-max text-black rounded-xl px-2 text-center cursor-pointer hover:shadow-inner hover:shadow-black transition ease-in-out duration-300">Random account (email features not available)</p>
+</div>
+
+<div class="flex justify-evenly mx-6 md:mx-auto max-w-[720px] rounded-2xl bg-gray-100 mt-6 py-10 md:py-5 shadow-[0px_6px_7px_3px_#00000024]">
+
+    <div>
+        <h1 class="text-3xl text-black font-bold">Login</h1>
+        <p class="text-gray-400 mb-4 x:text-xl lg:mt-2">Type your credentials to log in</p>
+        <form [formGroup]="loginForm" (submit)="logIn()" class="flex flex-col items-center">
+            <input 
+            formControlName="username" 
+            maxlength="20"
+            [class]="validateField('username')" 
+            class="border-2 p-2 font-semibold mb-2 w-64 x:w-80 rounded-xl outline-none" 
+            type="email" 
+            placeholder="Username">
+            <div class="relative">
+                <input 
+                formControlName="password" 
+                maxlength="120"
+                [type]="!isPasswordVisible ? 'password':'text'"  
+                [class]="validateField('password')" 
+                class="border-2 font-semibold
+                p-2 w-64 x:w-80 rounded-xl" 
+                type="password" 
+                placeholder="Password">
+                <i (click)="showPassword()" [class]="(!isPasswordVisible ? 'fa-eye-slash' : 'fa-eye')" class="cursor-pointer fa-regular fa-eye absolute bottom-3 right-3"></i>
+            </div>
+
+            <button type="submit" [ngClass]="{'pointer-events-none':isLoading}" class="inline-block bg-cyan-300 w-[40%] py-1 px-4 mt-5 font-semibold rounded-2xl x:w-[80%] lg:w-full lg:text-xl hover:shadow-inner hover:shadow-black transition ease-in-out duration-300">Done <i *ngIf="isLoading" class="fa fa-spinner animate-spin"></i></button>
+        </form>
+
+        <p class="font-medium mt-4 text-center x:mt-7">Not a member? <a routerLink="/auth/register" class="underline decoration-2">Register here</a></p>
+        <p class="font-medium mt-4 text-center x:mt-7 text-red-500">Forgot password? <a routerLink="/alexpress/change-password/x" class="underline decoration-2">Click here</a></p>
+        
+    </div>
+
+    <div class="hidden md:block">
+        <img src="assets/images/small-shopping-cart-blue-space-space-text_185193-1490.jpg" class="w-64 h-72 object-cover rounded-2xl" alt="image">
+    </div>
+
+</div>
+
+<div *ngIf="show2Auth" class="fixed inset-0 bg-[#00000080] z-10"></div>
+
+<div *ngIf="show2Auth" class="fixed z-20 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-60 h-60 flex flex-col items-center justify-start bg-white rounded-md p-2">
+    <p class="font-medium mb-2">Type the 6-digits code of your authenticator app<p>
+    <input #code class="py-1 tracking-widest px-2 border-2 border-black font-medium rounded-md text-center" type="text" maxlength="6" placeholder="0 0 0 0 0 0">
+    <div class="flex justify-center mt-auto">
+        <button type="button" class="py-1 px-2 border border-black rounded-md font-medium cursor-pointer hover:bg-gray-300" (click)="onSubmitTwoFactor(code.value)">Submit</button>
+    </div>
+</div>

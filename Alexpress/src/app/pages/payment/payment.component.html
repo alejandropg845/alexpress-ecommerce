@@ -1,0 +1,57 @@
+<h1 class="mt-32 font-bold text-3xl text-center md:mt-40 md:mb-10">Order checkout</h1>
+
+<div class="bg-gray-100 mx-auto w-[95%] max-w-[648px] rounded-lg px-1 mb-5 mt-5" *ngIf="cart">
+    <p class="font-medium border-b-2 border-cyan-300 mb-2 p-2">Your order summary</p>
+
+    @for (product of cart!.cartProducts; track cart) {
+    <div class="bg-white container flex mx-auto rounded-lg p-2 gap-4 mb-2"> <!--Product container-->
+
+        <img class="max-w-36 rounded-lg" [src]="product.image" alt="product image">
+
+        <div class="container flex flex-col "> <!--Product info-->
+            <p class="text-base line-clamp-2 font-semibold w-full"
+                style="overflow-wrap: break-word; word-break: break-word;">{{product.title}}</p>
+
+            <p class="text-xs font-bold">USD <span class="font-bold text-3xl">{{product.newPrice}}</span>$</p>
+            <p class="text-xs font-bold mb-2">Shipping <span
+                    class="font-bold text-2xl">{{product.shippingPrice}}</span>$</p>
+            <div class="flex items-center bg-gray-300 w-max rounded-lg">
+                <i (click)="changeQuantity(product.productId, -1)"
+                    class="fa-solid px-1 cursor-pointer rounded-full fa-minus select-none"></i>
+                <p class="font-bold px-2 select-none">{{product.quantity}}</p>
+                <i (click)="changeQuantity(product.productId, 1)"
+                    class="px-1 rounded-full fa-solid fa-plus select-none cursor-pointer"></i>
+            </div>
+        </div>
+    </div>
+    }
+
+    <div class="flex flex-col justify-center w-full"> <!-- Summary-->
+        <div class="flex justify-between items-center p-2">
+            <p class="text-lg font-semibold x:text-xl md:text-2xl">Total:</p>
+            <p class="font-bold text-3xl"><span>{{cart!.summary | number}}$</span></p>
+        </div>
+        <div class="flex flex-col justify-center items-start p-2 gap-2">
+
+            <p class="text-xl font-medium">Select your address:</p>
+            @for (address of addresses; track address) {
+                <button [disabled]="addressId"
+                    [ngClass]="{ 'cursor-not-allowed': addressId }"
+                    #addressButton
+                    class="font-medium text-start border-2 border-black rounded-md px-1 transition ease-in-out"
+                    (click)="onSelectedAddress(address.id, addressButton)">
+                    {{address.residence}}, {{address.city}}, {{address.country}}, {{address.fullName}}
+                </button>
+            }
+            <button class="px-2 bg-gray-300 rounded-md font-medium hover:bg-gray-400" type="button" (click)="clearSelection()">Clear selection</button>
+            <p *ngIf="addresses.length === 0">You haven't added any address. <a routerLink="/alexpress/addresses" class="text-cyan-600 underline font-semibold">Add one</a></p>
+            
+        </div>
+        <button 
+        type="button"
+        (click)="redirectToStripe()"
+        class="bg-cyan-400 text-2xl py-1 font-medium rounded-md mt-2 hover:bg-cyan-500 transition ease-in-out">Go to
+            pay
+        </button>
+    </div>
+</div>

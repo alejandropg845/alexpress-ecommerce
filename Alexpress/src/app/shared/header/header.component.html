@@ -1,0 +1,201 @@
+
+
+
+<header class="pt-2 top-0 left-0 fixed w-full lg:mb-20 z-[999] bg-white mb-5 shadow-[0px_3px_10px_6px_#00000024]">
+
+    <a routerLink="/alexpress/admin-mode" *ngIf="username === 'alejandropg845'">
+        <i class="fixed top-0 left-0 fa fa-solid fa-gear"></i>
+    </a>
+
+    <!-- First part of header -->
+    <div class="flex justify-evenly">
+        
+        <img routerLink="/alexpress/home" class="w-11 h-11  md:w-20 md:h-20 cursor-pointer" src="assets/templates/logos/white-mode-logo.png" alt="logo">
+        <!--Search-->
+        <div class="flex items-center relative">
+            <input 
+            #input 
+            type="search" 
+            (input)="filterProducts(input.value)"
+            (focus)="showFilteredProducts = true"
+            (blur)="showFilteredProducts = false"
+            class="px-2 py-2 w-32 text-xs rounded-3xl x:w-44 bg-gray-200 md:w-80 md:px-4 md:text-lg" placeholder="What's on your mind?">
+            <i class="fa-solid fa-magnifying-glass ml-1 md:text-2xl md:mr-2"></i>
+        
+            <ul *ngIf="showFilteredProducts" #productsList class="flex-col h-64 overflow-auto z-50 absolute top-12 left-0 w-56 md:w-80 md:top-16 rounded-b-none rounded-xl"> 
+                
+                @for (product of products; track product) {
+                <a (click)="productsList.classList.add('hidden')" [routerLink]="['/alexpress/product', product.id]" class="bg-white flex justify-evenly items-center hover:bg-gray-400 transition ease-in-out duration-300 py-1 last-of-type:border-none border-b border-white md:px-5">
+                    <p class="text-xs font-medium md:text-sm line-clamp-1 w-32 md:w-64 md:line-clamp-2">{{product.title}}</p>
+                    <img class="w-8 h-8 md:w-12 md:h-12 rounded-lg object-contain" [src]="product.image" alt="image">
+                </a>
+                }
+            </ul>
+        </div>
+        
+        <!--User-->
+        <div (mouseover)="showDropMenu = true" 
+        (mouseleave)="showDropMenu = false"
+        class="flex items-center hover:bg-gray-300 rounded-full p-2 transition ease-in-out duration-300 relative">
+            <i class="fa-regular fa-user p-1 md:text-3xl md:mr-2"></i>
+            
+            <div>
+                
+                <p *ngIf="username" class="select-none text-base md:text-lg w-10 line-clamp-1 x:w-full">{{username}}</p>
+                
+                <p *ngIf="!username" routerLink="/auth/login" class="font-bold bg-gradient-to-r hover:border-cyan-600 from-cyan-300 to-cyan-500 px-2 rounded-xl w-max cursor-pointer">Login here</p>
+                
+            </div>
+
+            <ul *ngIf="showDropMenu && username" class="absolute top-10 border border-black w-max left-1/2 -translate-x-1/2 md:top-16">
+
+                <a (click)="showDropMenu = false" routerLink="/alexpress/orders">
+                    <li class="bg-white py-1  text-sm font-medium text-center pr-2 hover:bg-cyan-300 transition ease-in-out md:text-base duration-300"><i class="p-2 fa-solid fa-truck"></i>Orders</li>
+                </a>
+
+                <a (click)="showDropMenu = false" routerLink="/alexpress/my_products">
+                    <li class="bg-white  py-1 text-sm font-medium text-center pr-2 hover:bg-cyan-300 transition ease-in-out md:text-base duration-300 w-32 md:w-full"><i class="p-2 fa-solid fa-glasses"></i>My products</li>
+                </a>
+
+                <a (click)="showDropMenu = false" routerLink="/alexpress/addresses">
+                    <li class="bg-white  py-1 text-sm font-medium text-center pr-2 hover:bg-cyan-300 transition ease-in-out md:text-base duration-300 w-32 md:w-full"><i class="p-2 fa-regular fa-address-book"></i>My addresses</li>
+                </a>
+
+                <a (click)="showDropMenu = false" routerLink="/alexpress/account">
+                    <li class="bg-white  py-1 text-sm font-medium text-center pr-2 hover:bg-cyan-300 transition ease-in-out md:text-base duration-300 w-32 md:w-full"><i class="p-2 fa-solid fa-user"></i>Account</li>
+                </a>
+                
+                <button class="w-full" (click)="logOut()">
+                    <li class="bg-white text-sm font-medium text-center pr-2 hover:bg-cyan-300 transition ease-in-out md:text-base duration-300 text-red-600"><i class="p-2 fa-solid fa-right-from-bracket"></i>Log out</li>
+                </button>
+
+            </ul>
+        </div>
+
+        <div (click)="goToCart()"
+            (mouseover)="showCart = true"
+        class="flex gap-4 items-center px-1 hover:bg-gray-300 transition ease-in-out duration-200 rounded-3xl cursor-pointer">
+            <div class="relative">
+                <i class="fa-solid fa-cart-shopping text-xl x:text-2xl md:text-3xl"></i>
+                <p class="
+                absolute -right-1 
+                -top-1 px-1 border-2 
+                border-black
+                font-bold rounded-full text-xs bg-white
+             x:text-sm md:text-base">{{getCartLength()}}</p>
+            </div>
+            <p class="hidden font-bold lg:block">Shopping cart</p>
+        </div>
+        
+    </div>
+
+    <!-- VENTANA DE CART-->
+    <div *ngIf="showCart"
+        (mouseover)="showCart = true"
+        class="w-[350px] h-[400px] absolute md:top-20 md:right-10 lg:top-20 lg:right-40 bg-gray-200 border-2 rounded-lg shadow-lg shadow-black"> <!--Window container-->
+        
+        <button class="absolute top-.5 right-2" type="button" (click)="showCart = false">
+            <i class="fa fa-solid fa-x"></i>
+        </button>
+
+        <p *ngIf="!cart" class="text-gray-500 mt-10 text-xl text-center">Add your first product!</p>
+
+
+        <div *ngIf="cart" class="h-full w-full p-1 flex flex-col items-center overflow-y-auto overflow-x-hidden"> <!--Window content-->
+            
+            <p *ngIf="cart.cartProducts.length === 0" class="text-gray-500 mt-10 text-xl">Add your first product!</p>
+
+
+
+            @for (item of cart.cartProducts; track item; let i = $index) {
+
+            <div class="flex items-center justify-evenly w-full h-32 m-1 my-5" [ngClass]="{'mb-12':i === cart.cartProducts.length - 1}"> <!--Product-->
+
+                <div class="relative h-32">
+                    <img [routerLink]="['/alexpress/product', item.productId]" class="w-32 h-full object-cover rounded-sm cursor-pointer" [src]="item.image" alt="product image">
+                    <p class="absolute -top-2 -right-2 px-2 bg-gradient-to-r from-cyan-400 to-cyan-500 rounded-full border-2 border-blackfont-bold text-xl">{{item.quantity}}</p>
+                </div>
+
+                <div class="flex flex-col items-center gap-2 min-w-[161px]">
+                    <p *ngIf="item.couponName" class="bg-cyan-300 px-1 rounded-md font-semibold">{{item.couponName}}</p>
+                    <p *ngIf="item.customizedDiscount" class="bg-cyan-300 px-1 rounded-md font-semibold">{{item.customizedDiscount}} % off</p>
+                    <div class="flex items-center justify-evenly gap-2">
+                        <div class="flex items-center">
+                            <p (click)="addToCart(-1, item.productId, item.couponName, item.customizedDiscount)" class="font-bold bg-gray-300 pl-2 pr-1 rounded-tl-md rounded-bl-md cursor-pointer">-</p>
+                            <p class="font-bold bg-gray-300 px-1">{{item.quantity}}</p>
+                            <p (click)="addToCart(1, item.productId, item.couponName, item.customizedDiscount)" class="font-bold bg-gray-300 pl-1 pr-2 rounded-br-md rounded-tr-md cursor-pointer">+</p>
+                        </div>
+
+                        <p class="font-bold text-xs max-w-[120px] line-clamp-1">USD <span class="text-3xl">{{item.newPrice}}</span>$</p>
+                        
+                    </div>
+                    <p (click)="removeFromCart(item.productId)" class="bg-red-300 font-bold px-2 rounded-md text-sm cursor-pointer hover:bg-red-400 transition ease-in-out duration-200">Remove</p>
+                </div>
+
+            </div>
+
+            }
+            <!--Summary and pay all-->
+            <div class="absolute bottom-0 left-0 w-full flex items-center justify-evenly p-2 bg-gray-200 rounded-bl-lg rounded-br-lg">
+                <p class="font-bold text-sm">Summary: <span class="text-xl">{{cart.summary.toFixed(1)}}</span>$</p>
+                <a class="cursor-pointer" (click)="goToPayment()">
+                    <p *ngIf="cart.cartProducts.length > 0"
+                     class="font-bold bg-cyan-300 px-2 rounded-lg hover:text-white hover:bg-cyan-400 transition ease-in-out duration-200">Pay all</p>
+                </a>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Second part of header -->
+    <div class="flex justify-between items-center mt-2 md:mt-0 lg:justify-evenly">
+
+        <!-- Boton para pantallas grandes-->
+        <div 
+        class="x:ml-3 cursor-pointer flex items-center hover:bg-gray-300 transition ease-in-out duration-300 p-2 rounded-md mb-1 gap-1">
+            
+            <button (mouseover)="showListt()" class="hidden text-lg font-semibold  rounded-full mb-1 lg:block">All categories</button>
+
+            <i (click)="showListt()" (mouseover)="showListt()" class="fa-solid fa-bars hover:text-cyan-300 text-base"></i>
+        </div>
+        
+        <ul *ngIf="showList"
+        (mouseleave)="showListt()"
+        #ulCategories 
+        class="ml-2 
+        absolute border-2 
+        border-black 
+        top-1 md:top-10 left-2 bg-white w-64 rounded shadow-[1px_1px_9px_3px_#00000024]">
+            
+            <a [routerLink]="['/alexpress/categories',1]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-regular fa-clock p-2"></i>Watches</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',2]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-shirt p-2"></i>Clothes</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',3]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-shoe-prints p-2"></i>Shoes</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',4]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-paw p-2"></i>Pet toys</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',5]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-mobile-screen-button p-2"></i>Phones and Tablets</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',6]" (click)="ulCategories.classList.add('hidden')">
+                <li class="text-sm x:text-base cursor-pointer px-4 py-1 hover:bg-cyan-300 border-b border-blacktransition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-tv p-2"></i>TV and home appliances</li>
+            </a>
+            <a [routerLink]="['/alexpress/categories',7]" (click)="ulCategories.classList.add('hidden')" (mouseover)="ulCategories.classList.remove('hidden')">
+                <li class="cursor-pointer px-4 py-1 hover:bg-cyan-300transition ease-in-out duration-200 font-bold hover:font-bold"><i class="fa-solid fa-headphones p-2"></i>Audio and sound</li>
+            </a>
+        </ul>
+        
+        <a routerLink="/alexpress" class="text-xs font-semibold md:text-base hover:text-sky-500 transition ease-in-out duration-300 x:text-base text-black"><i class="hidden fa-solid fa-house md:inline-block md:p-2"></i>Home</a>
+        <a routerLink="/alexpress/products" class="text-xs font-semibold md:text-base hover:text-sky-500 transition ease-in-out duration-300 x:text-base"><i class="hidden fa-solid fa-sack-dollar md:inline-block md:p-2"></i>Products</a>
+        <a routerLink="/alexpress/less" class="text-xs font-semibold md:text-base hover:text-sky-500 transition ease-in-out duration-300 x:text-base"><i class="hidden fa-solid fa-dollar-sign md:inline-block md:p-2"></i>Under 3,99$</a>
+        <a routerLink="/alexpress/wish_list" class="text-xs font-semibold md:text-base hover:text-sky-500 transition ease-in-out duration-300 x:text-base"><i class="hidden fa-regular fa-heart md:inline-block md:p-2"></i>Wish list</a>
+        <a routerLink="/alexpress/add" class="text-xs font-semibold pr-2 md:text-base hover:text-sky-500 transition ease-in-out duration-300 x:text-base md:mr-3"><i class="hidden fa-solid fa-cart-plus md:inline-block md:p-2"></i>Sell a product</a>
+    </div>
+
+</header>

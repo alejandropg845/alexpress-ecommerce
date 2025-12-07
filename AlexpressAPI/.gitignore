@@ -1,0 +1,80 @@
+# ===================================================================
+# .NET / ASP.NET Core / Visual Studio / Rider
+# ===================================================================
+
+# Archivos binarios y de compilación
+[Bb]in/
+[Oo]bj/
+
+# Archivos específicos del usuario y del IDE
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+
+# Carpeta de paquetes de NuGet
+packages/
+
+# Resultados de pruebas
+TestResults/
+*.trx
+
+# Archivos de registro
+*.log
+*.log.*
+
+# Secretos y configuración local
+appsettings.Development.json
+secrets.json
+*.Secret.json
+
+# Cache de Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# ===================================================================
+# Angular / Node.js
+# ===================================================================
+
+# Dependencias de Node - node_modules/
+
+# Archivos de compilación de Angular (producción)
+dist/
+
+# Cache de Angular
+.angular/
+.angular-cache/
+
+# Archivos de registro de npm y yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de entorno con secretos
+src/environments/environment.prod.ts
+src/environments/environment.local.ts
+.env
+.env.*
+!.env.example
+
+# Cache de herramientas
+.eslintcache
+.stylelintcache
+
+# ===================================================================
+# Archivos Generales y del Sistema Operativo
+# ===================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Archivos temporales de editores
+*.swp
+*~

@@ -1,0 +1,71 @@
+<div class="w-full flex flex-col items-center justify-center my-32 gap-3 md:mt-40 max-w-[600px] mx-auto"> <!--Container-->
+
+    <div class="max-w-28 flex flex-col items-center"> <!--Img container-->
+        <img src="https://cdn-icons-png.flaticon.com/512/8345/8345328.png" alt="">
+        <p class="font-medium x:text-xl">{{username}}</p>
+    </div>
+
+    <div class="flex flex-col items-center justify-center gap-3"> <!--Content-container-->
+
+        <div class="bg-cyan-200 px-2 py-1 rounded-md flex items-center gap-2"> <!--Option container-->
+            <label for="" class="font-medium">Enable 2FA Authentication</label>
+            <button *ngIf="!isTwoFactorEnabled" (click)="get2FAKey()" class="py-1 px-2 bg-cyan-300 border border-black font-medium rounded-md hover:bg-cyan-500">Enable</button>
+            <button disabled *ngIf="isTwoFactorEnabled" class="py-1 px-2 bg-green-300 border border-black font-medium rounded-md">Enabled</button>
+            
+        </div>
+
+        <div class="flex flex-col items-center w-[95%] x:flex-row" *ngIf="showQr && qrValue">
+
+            <div class="flex flex-col items-center max-w-[240px] mb-4 x:flex-1">
+                <p class="font-medium">Scan the following QR.</p>
+                <qrcode [qrdata]="qrValue" [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
+
+            <div class="flex flex-col items-center x:flex-1">
+                <p class="text-gray-400 font-medium text-center mb-2">Once you scan the QR from above, type the 6-digits code from your authenticator app</p>
+                <input #code class="border border-cyan-300 rounded-lg py-1 px-2 text-center tracking-widest text-xl" type="text" maxlength="6" placeholder="0 0 0 0 0 0">
+                <button class="font-medium py-1 px-2 border-2 border-black rounded-md mt-2 hover:bg-gray-300" (click)="set2FAauth(code.value)">Submit</button>
+            </div>
+
+        </div>
+
+        <div class="flex flex-col "> <!--Option container-->
+            <p class="text-sm font-medium mb-2">Change password</p>
+           
+            <div class="mb-2 relative">
+                <input #currentPassword class="w-full py-1 px-2 border border-black rounded-md" [type]="showCurrentPassword?'text':'password'" placeholder="Current password">
+                <i *ngIf="showCurrentPassword" (click)="showCurrentPassword = false" class="fa fa-solid cursor-pointer fa-eye absolute top-1/2 -translate-y-1/2 right-2"></i>
+                <i *ngIf="!showCurrentPassword" (click)="showCurrentPassword = true" class="fa fa-solid cursor-pointer fa-eye-slash absolute top-1/2 -translate-y-1/2 right-2"></i>
+            </div>
+            <div class="mb-2 relative">
+                <input #pass1 class="w-full py-1 px-2 border border-black rounded-md" [type]="showPass1?'text':'password'" placeholder="New password">
+                <i *ngIf="showPass1" (click)="showPass1 = false" class="fa fa-solid cursor-pointer fa-eye absolute top-1/2 -translate-y-1/2 right-2"></i>
+                <i *ngIf="!showPass1" (click)="showPass1 = true" class="fa fa-solid cursor-pointer fa-eye-slash absolute top-1/2 -translate-y-1/2 right-2"></i>
+            </div>
+            <div class="mb-2 relative">
+                <input #pass2 class="w-full py-1 px-2 border border-black rounded-md" [type]="showPass2?'text':'password'" placeholder="New password again">
+                <i *ngIf="showPass2" (click)="showPass2 = false" class="fa fa-solid cursor-pointer fa-eye absolute top-1/2 -translate-y-1/2 right-2"></i>
+                <i *ngIf="!showPass2" (click)="showPass2 = true" class="fa fa-solid cursor-pointer fa-eye-slash absolute top-1/2 -translate-y-1/2 right-2"></i>
+            </div>
+        </div>
+
+        <button (click)="changePassword(currentPassword, pass1, pass2)" class="border border-black rounded-md font-medium px-2 py-1 hover:bg-gray-200" type="button">Change password</button>
+
+    </div>
+
+</div>
+
+<div *ngIf="recoveryCodes.length === 5" class="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[95%] max-w-[450px] h-[350px] z-[999999999]">
+    <div class="flex flex-col items-center justify-start p-2 bg-gray-300 rounded-md w-full h-full">
+        <p><strong class="text-red-600">WARNING </strong>Save these codes in a place you'd consider safe</p>
+        <div class="bg-gray-300 p-2 rounded-md">
+            @for (code of recoveryCodes; track code) {
+                <p class="font-medium tracking-widest text-3xl">{{code}}</p>
+            }
+        </div>
+        <button class="py-1 px-1 rounded-md border border-black font-medium w-full mt-auto hover:bg-gray-400" (click)="recoveryCodes = []">Done</button>
+    </div>
+    
+</div>
+
+<div *ngIf="recoveryCodes.length === 5" class="fixed inset-0 z-[99999999] bg-[#00000067]"></div>
