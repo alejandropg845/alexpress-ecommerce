@@ -17,12 +17,16 @@ namespace API.Services.App
         private readonly IOrderUnitOfWork _uow;
         private readonly string _secret_key;
         private readonly string _webHookSecret;
+        private readonly string _successUrl;
+        private readonly string _errorUrl;
         private readonly ILogger<OrderService> _logger;
         public OrderService(IOrderUnitOfWork uow, IConfiguration config, ILogger<OrderService> logger)
         {
             _uow = uow;
             _secret_key = config["Stripe:Secret_key"]!;
             _webHookSecret = config["Stripe:Web_hook_secret"]!;
+            _successUrl = config["Stripe:SuccessUrl"]!;
+            _errorUrl = config["Stripe:ErrorUrl"]!;
             _logger = logger;
         }
         public async Task<IReadOnlyList<OrderDto>> GetOrdersAsync(string userId)
@@ -217,8 +221,8 @@ namespace API.Services.App
 
             StripeConfiguration.ApiKey = _secret_key;
 
-            string successUrl = "http://localhost:4200/alexpress/order-success";
-            string cancelUrl = "http://localhost:4200/alexpress/home";
+            string successUrl = _successUrl;
+            string cancelUrl = _errorUrl;
 
             var lineItems = new List<SessionLineItemOptions>();
 
