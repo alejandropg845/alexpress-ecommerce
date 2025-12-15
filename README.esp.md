@@ -1,6 +1,6 @@
 <div align="center">
   <a href="./README.md">
-    <img src="https://img.shields.io/badge/Leer_en_Espa%C3%B1ol-ES-red?style=for-the-badge" alt="Read in English">
+    <img src="https://img.shields.io/badge/Read_in_English-EN-blue?style=for-the-badge" alt="Read in English">
   </a>
 </div>
 
