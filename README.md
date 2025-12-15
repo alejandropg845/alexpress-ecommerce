@@ -16,7 +16,7 @@
 
 E-commerce platform inspired by Aliexpress.
 
-![Demo Alexpress](./MyVideo1.gif)
+![Demo Alexpress](./ecommerce.gif)
 
 ## Tech stack
 
