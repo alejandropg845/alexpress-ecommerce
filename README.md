@@ -194,4 +194,13 @@ Description of the platform's key capabilities:
     *   Visualization of opinions from other buyers.
 
 ---
+
+<div align="center">
+  <br/>
+  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
+    <img src="https://img.shields.io/badge/View_Live_Demo-Visit%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="View Live Demo">
+  </a>
+  <br/>
+</div>
+
 Made by [Alejandro.NET](https://alejandropg845.github.io/resume)
