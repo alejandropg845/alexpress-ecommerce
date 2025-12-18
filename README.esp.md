@@ -194,4 +194,11 @@ Descripción de las capacidades clave de la plataforma:
     *   Visualización de opiniones de otros compradores.
 
 ---
+<div align="center">
+  <br/>
+  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
+    <img src="https://img.shields.io/badge/Ver_Demo_en_Vivo-Visitar%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="Ver demo en vivo">
+  </a>
+  <br/>
+</div>
 Hecho por [Alejandro.NET](https://alejandropg845.github.io/resume)
