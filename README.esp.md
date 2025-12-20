@@ -16,11 +16,58 @@
 
 Plataforma de comercio electrónico inspirada en Aliexpress.
 
-![Demo Alexpress](./ecommerce.gif)
+# Demo del proyecto y características
+
+## Identidad y 2FA
+Implementación completa de Autenticación de Doble Factor (2FA) utilizando códigos QR y Apps Autenticadoras (Google/Microsoft), incluyendo códigos de recuperación.
+
+| Activación de 2FA | Flujo de Login 2FA |
+| :---: | :---: |
+| ![Activar 2FA](alexpress-readme-assets/enable_2fa.gif) | ![Login con 2FA](alexpress-readme-assets/login_2fa.gif) |
+| Usuario escanea QR y verifica código | Login requiere contraseña + OTP |
+
+## Flujo de pago con Stripe
+Flujo transaccional completo y pagos seguros vía Stripe.
+
+#### 1. Carrito dinámico y cupones
+Interacción en tiempo real con el carrito de compras y aplicación de descuentos.
+
+![Añadir al Carrito](alexpress-readme-assets/add_to_cart.gif)
+
+#### 2. Flujo de checkout seguro
+Redirección a la pasarela segura de Stripe y procesamiento del pago.
+
+![Checkout](alexpress-readme-assets/checkout.gif)
+
+#### 3. Email de resumen de orden
+El correo con el resumen de la orden se envía una vez finalizado el checkout.
+
+![Resumen Email](alexpress-readme-assets/email_summary.gif)
+
+
+### Moderación de contenido con IA
+Integración con Azure Content Safety para bloquear automáticamente imágenes NSFW y texto ofensivo (título, descripción) en el producto.
+
+| Seguridad de contenido |
+| :---: |
+| ![Moderación IA](alexpress-readme-assets/safety_content.gif) |
+| Azure AI bloqueando contenido ofensivo |
+
+
+# Despliegue
+
+> 💡 **Nota:** Este proyecto está desplegado en Azure para fácil acceso. Dado que este proyecto integra múltiples servicios (Azure AI, Stripe, Cloudinary, Gmail), ejecutarlo localmente requiere una configuración compleja. Si deseas probar un proyecto mío localmente, por favor, revisa mi repositorio contenerizado [Scrum Task Manager](https://github.com/alejandropg845/scrum-task-manager).
+>
+
+<div align="center">
+  <br/>
+  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
+    <img src="https://img.shields.io/badge/Ver_Demo_en_Vivo-Visitar%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="Ver Demo en Vivo">
+  </a>
+  <br/>
+</div>
 
 ## Tech Stack
-
-El proyecto utiliza un stack moderno enfocado en rendimiento y escalabilidad:
 
 *   **Frontend:** Angular, TailwindCSS.
 *   **Backend:** ASP.NET Core.
@@ -39,128 +86,126 @@ El sistema implementa una arquitectura en capas (Controller-Service-Repository).
     *   **Dependency Injection:** Desacoplamiento de dependencias para facilitar el testing y mantenimiento.
 
 ## Esquema de base de datos
-
 ```mermaid
 classDiagram
-    %% Core Identity
-    class AppUser {
-        +string Id
-        +bool IsDisabled
-    }
-    
-    class Address {
-        +int Id
-        +string AppUserId
-        +string FullName
-        +string Country
-        +string City
-    }
+%% Core Identity
+class AppUser {
++string Id
++bool IsDisabled
+}
+class Address {
+    +int Id
+    +string AppUserId
+    +string FullName
+    +string Country
+    +string City
+}
 
-    
-    class Product {
-        +int Id
-        +string AppUserId
-        +string Title
-        +decimal Price
-        +int Stock
-        +int CategoryId
-        +int ConditionId
-        +List~ReviewItem~ Reviews
-    }
 
-    class Category {
-        +int Id
-        +string Name
-    }
+class Product {
+    +int Id
+    +string AppUserId
+    +string Title
+    +decimal Price
+    +int Stock
+    +int CategoryId
+    +int ConditionId
+    +List~ReviewItem~ Reviews
+}
 
-    class Condition {
-        +int Id
-        +string Name
-    }
+class Category {
+    +int Id
+    +string Name
+}
 
-    class Coupon {
-        +int Id
-        +string CouponName
-        +decimal Discount
-        +int ProductId
-    }
+class Condition {
+    +int Id
+    +string Name
+}
 
-    class ReviewItem {
-        +int Id
-        +int Rating
-        +string Comment
-        +int ProductId
-    }
+class Coupon {
+    +int Id
+    +string CouponName
+    +decimal Discount
+    +int ProductId
+}
 
-   
-    class Order {
-        +int Id
-        +string AppUserId
-        +DateTimeOffset CreatedOn
-        +decimal Summary
-        +int AddressId
-        +List~OrderedProduct~ OrderedProducts
-    }
+class ReviewItem {
+    +int Id
+    +int Rating
+    +string Comment
+    +int ProductId
+}
 
-    class OrderedProduct {
-        +int Id
-        +int OrderId
-        +int ProductId
-        +int Quantity
-        +decimal Price
-    }
 
-    
-    class Cart {
-        +int Id
-        +string AppUserId
-        +decimal Summary
-        +List~CartProduct~ CartProducts
-    }
+class Order {
+    +int Id
+    +string AppUserId
+    +DateTimeOffset CreatedOn
+    +decimal Summary
+    +int AddressId
+    +List~OrderedProduct~ OrderedProducts
+}
 
-    class CartProduct {
-        +int Id
-        +int CartId
-        +int ProductId
-        +int Quantity
-    }
+class OrderedProduct {
+    +int Id
+    +int OrderId
+    +int ProductId
+    +int Quantity
+    +decimal Price
+}
 
-    
-    class WishList {
-        +int Id
-        +string AppUserId
-        +List~WishListProduct~ WishListProducts
-    }
 
-    class WishListProduct {
-        +int Id
-        +int WishListId
-        +int ProductId
-    }
+class Cart {
+    +int Id
+    +string AppUserId
+    +decimal Summary
+    +List~CartProduct~ CartProducts
+}
 
-    Product --> Category : tiene
-    Product --> Condition : tiene
-    Product "1" -- "0..1" Coupon : tiene
-    Product "1" -- "*" ReviewItem : tiene
-    
-    Order "1" -- "*" OrderedProduct : contiene
-    Order --> Address : se envía a
-    OrderedProduct --> Product : references
+class CartProduct {
+    +int Id
+    +int CartId
+    +int ProductId
+    +int Quantity
+}
 
-    Cart "1" -- "*" CartProduct : contiene
-    CartProduct --> Product : references
 
-    WishList "1" -- "*" WishListProduct : contiene
-    WishListProduct --> Product : references
+class WishList {
+    +int Id
+    +string AppUserId
+    +List~WishListProduct~ WishListProducts
+}
 
-    AppUser "1" .. "*" Product : vende
-    AppUser "1" .. "*" Order : realiza
-    AppUser "1" .. "1" Cart : gestiona
-    AppUser "1" .. "1" WishList : gestiona
-    AppUser "1" .. "*" Address : gestiona
+class WishListProduct {
+    +int Id
+    +int WishListId
+    +int ProductId
+}
 
+Product --> Category : tiene
+Product --> Condition : tiene
+Product "1" -- "0..1" Coupon : tiene
+Product "1" -- "*" ReviewItem : tiene
+
+Order "1" -- "*" OrderedProduct : contiene
+Order --> Address : se envía a
+OrderedProduct --> Product : references
+
+Cart "1" -- "*" CartProduct : contiene
+CartProduct --> Product : references
+
+WishList "1" -- "*" WishListProduct : contiene
+WishListProduct --> Product : references
+
+AppUser "1" .. "*" Product : vende
+AppUser "1" .. "*" Order : realiza
+AppUser "1" .. "1" Cart : gestiona
+AppUser "1" .. "1" WishList : gestiona
+AppUser "1" .. "*" Address : gestiona
 
 ```
+
 
 ## Autenticación y seguridad
 
@@ -193,12 +238,5 @@ Descripción de las capacidades clave de la plataforma:
     *   Sistema de reseñas y calificaciones por producto.
     *   Visualización de opiniones de otros compradores.
 
----
-<div align="center">
-  <br/>
-  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
-    <img src="https://img.shields.io/badge/Ver_Demo_en_Vivo-Visitar%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="Ver demo en vivo">
-  </a>
-  <br/>
-</div>
+
 Hecho por [Alejandro.NET](https://alejandropg845.github.io/resume)
