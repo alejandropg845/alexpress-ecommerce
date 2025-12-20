@@ -16,13 +16,60 @@
 
 E-commerce platform inspired by Aliexpress.
 
-![Demo Alexpress](./ecommerce.gif)
+# Project demo & features
+
+## Identity & 2FA
+A complete implementation of Two-Factor Authentication (2FA) using QR Codes and Authenticator apps (Google/Microsoft), including backup recovery codes.
+
+| Enabling 2FA | 2FA Login flow |
+| :---: | :---: |
+| ![Enable 2FA](alexpress-readme-assets/enable_2fa.gif) | ![Login with 2FA](alexpress-readme-assets/login_2fa.gif) |
+| User scans QR & verifies code | Login requires password + OTP |
+
+## Stripe checkout flow
+Full transactional flow and secure payments via Stripe.
+
+#### 1. Dynamic cart & coupons
+Real-time interaction with the shopping cart and discount application.
+
+![Add to Cart](alexpress-readme-assets/add_to_cart.gif)
+
+#### 2. Secure checkout flow
+Redirection to Stripe's secure gateway and payment processing.
+
+![Checkout](alexpress-readme-assets/checkout.gif)
+
+#### 3. Order summary email
+Email with order summary is sent once checkout finishes.
+
+![Email Summary](alexpress-readme-assets/email_summary.gif)
+
+
+### AI content moderation
+Integration with Azure Content Safety to automatically block NSFW images and offensive text (title, description) in product.
+
+| Safety Content |
+| :---: |
+| ![AI Moderation](alexpress-readme-assets/safety_content.gif) |
+| Azure AI blocking offensive content |
+
+
+# Deployment
+
+> 💡 **Note:** This project is deployed on Azure for easy access. Since this project integrates multiple services (Azure AI, Stripe, Cloudinary, Gmail), running it locally requires complex configuration. If you want to try a project of mine locally, please, check my containerized [Scrum Task Manager](https://github.com/alejandropg845/scrum-task-manager) repository.
+>
+
+<div align="center">
+  <br/>
+  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
+    <img src="https://img.shields.io/badge/View_Live_Demo-Visit%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="View Live Demo">
+  </a>
+  <br/>
+</div>
 
 ## Tech stack
 
-The project uses a modern stack focused on performance and scalability:
-
-*   **Frontend:** Angular 17, TailwindCSS.
+*   **Frontend:** Angular, TailwindCSS.
 *   **Backend:** ASP.NET Core.
 *   **Data:** Entity Framework Core, SQL Server.
 *   **Cloud & services:** Microsoft Azure, Stripe, Cloudinary.
@@ -193,14 +240,5 @@ Description of the platform's key capabilities:
     *   Review and rating system per product.
     *   Visualization of opinions from other buyers.
 
----
-
-<div align="center">
-  <br/>
-  <a href="https://alexpress-client-evcvg7ebguh7d4hd.canadacentral-01.azurewebsites.net/alexpress/home" target="_blank">
-    <img src="https://img.shields.io/badge/View_Live_Demo-Visit%20App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="View Live Demo">
-  </a>
-  <br/>
-</div>
 
 Made by [Alejandro.NET](https://alejandropg845.github.io/resume)
